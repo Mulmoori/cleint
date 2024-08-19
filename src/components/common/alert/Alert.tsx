@@ -3,14 +3,14 @@ import { theme } from "../../../style/theme";
 import * as S from "./style";
 
 // CustomModal 컴포넌트 타입 정의
-interface CustomModalProps {
+interface CustomAlertProps {
     description: string;
     onOk: () => void;
     text: string;
     // joinCode?: string;
 }
 
-const CustomAlert: React.FC<CustomModalProps> = ({
+const CustomAlert: React.FC<CustomAlertProps> = ({
     description,
     onOk,
     text,
