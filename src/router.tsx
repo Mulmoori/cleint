@@ -23,7 +23,7 @@ const Wrapper = styled.div`
 
 const Layout: React.FC = () => {
 	const location = useLocation();
-	const showNavbar = location.pathname !== "/entry";
+	const showNavbar = location.pathname !== "/";
 
 	return (
 		<Wrapper>
@@ -38,9 +38,9 @@ export default function Router(): JSX.Element {
 		<BrowserRouter>
 			<Routes>
 				<Route element={<Layout />}>
-					<Route index element={<Home />} />
+					<Route index element={<Auth />} />
+					<Route path="/home" element={<Home />} />
 					<Route path="/profile" element={<Profile />} />
-					<Route path="/entry" element={<Auth />} />
 				</Route>
 			</Routes>
 		</BrowserRouter>

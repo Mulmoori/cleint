@@ -7,6 +7,7 @@ import Label from "@components/common/input-field/label/Label.tsx";
 import InputField from "@components/common/input-field/InputField.tsx";
 import RadiusButton from "@components/common/button/radius-button/RadiusButton.tsx";
 import RectangleButton from "@components/common/button/rectangle-button/RectangleButton.tsx";
+import instance from "../../../../api/axios.ts";
 
 export default function SignUpForm() {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ export default function SignUpForm() {
   const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
   const [isValidAuthCode, setIsValidAuthCode] = useState<boolean>(false);
   const [isVerification, setIsVerification] = useState<boolean>(false);
+  const [tempToken, setTempToken] = useState<string>("");
 
   const handleName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -87,29 +89,71 @@ export default function SignUpForm() {
     }
   }, [name, password, passwordCheck]);
 
-  const handleAuthCodeButtonClick = () => {
+  const handleAuthCodeButtonClick = async () => {
     if (isValidEmail && !isIssued) {
-      alert("인증번호가 발송되었습니다.");
-      setIsIssued(true);
+      try {
+        const response = await instance.post("/api/auth/validations/email", {
+          email: email,
+          is_duplicate_check: false,
+        })
+
+        if (response.status === 200) {
+          alert("인증번호가 발송되었습니다.");
+          setIsIssued(true);
+        }
+
+        const tryCount = response.data.data.tryCnt;
+
+        if (tryCount > 5) {
+          alert("인증번호 발송 횟수를 초과했습니다.");
+          return;
+        }
+      } catch (error) {
+        alert("인증번호 전송에 실패했습니다");
+      }
     }
   };
 
-  const handleVerificationButtonClick = () => {
+  const handleVerificationButtonClick = async () => {
     if (
       authCode !== "" &&
       isIssued &&
       !isVerification &&
       CONSTANT.REGEX.AUTH_CODE.test(authCode)
     ) {
-      alert("인증되었습니다.");
-      setIsVerification(true);
+      try {
+        const response = await instance.post("/api/auth/validations/authentication-code", {
+          email: email,
+          authentication_code: authCode,
+        });
+
+        if (response.status === 201) {
+          setIsVerification(true);
+          setTempToken(response.data.data.temporary_token);
+          alert("인증되었습니다.");
+        }
+      } catch (error) {
+        alert("인증에 실패했습니다.");
+      }
     }
   };
 
-  const handleSubmitButtonClick = () => {
+  const handleSubmitButtonClick = async () => {
     if (isValid) {
-      alert("회원가입이 완료되었습니다.");
-      navigate("/");
+      try {
+        const response = await instance.post("/api/auth/sign-up", {
+          nickname: name,
+          password: password,
+          temporary_token: tempToken,
+        })
+
+        if (response.status === 201) {
+          alert("회원가입이 완료되었습니다.");
+          navigate("/home");
+        }
+      } catch (error) {
+        alert("회원가입에 실패했습니다.");
+      }
     }
   };
 
