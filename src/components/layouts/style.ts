@@ -7,8 +7,7 @@ export const NavbarWrapper = styled.div`
 	padding: 0 60px;
 	height: 128px;
 	background-color: #fff;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-	border-bottom: 1.333px rgba(195, 212, 233, 0.4);
+	border-bottom: 1.333px solid rgba(195, 212, 233, 0.4);
 `;
 
 export const LeftSection = styled.div`
