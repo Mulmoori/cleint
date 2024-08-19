@@ -9,6 +9,7 @@ export default defineConfig({
             "@pages": path.resolve(__dirname, "src/pages"), // 'src/pages' 폴더를 '@pages' 별칭으로 사용
             "@styles": path.resolve(__dirname, "src/styles"), // 'src/styles' 폴더를 '@styles' 별칭으로 사용
             "@svg": path.resolve(__dirname, "src/assets"), // 'src/assets/icons' 폴더를 '@svg' 별칭으로 사용
+            "@hooks": path.resolve(__dirname, "src/hooks"), // 'src/hooks' 폴더를 '@hooks' 별칭으로 사용
         },
     },
     plugins: [react()],

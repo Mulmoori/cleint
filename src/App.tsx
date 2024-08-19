@@ -1,4 +1,5 @@
 // App.tsx
+import 'regenerator-runtime/runtime'
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from './style/globalStyle';
