@@ -1,28 +1,27 @@
-// NavBar.tsx
-import React, { useState } from 'react';
-import * as S from './style';
-import { FaBars } from 'react-icons/fa';
+import React from "react";
+import * as S from "./style";
+import LogoImage from "../../assets/mainLogo.png";
+import IconSVG from "../../assets/icons/profileIcon.svg";
 
 const Navbar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  return (
-    <S.NavbarWrapper>
-      <S.Logo>물무리</S.Logo>
-      <S.HamburgerIcon onClick={toggleMenu}>
-        <FaBars />
-      </S.HamburgerIcon>
-      <S.Menu isOpen={isOpen}>
-        <S.MenuItem>메뉴 1</S.MenuItem>
-        <S.MenuItem>메뉴 2</S.MenuItem>
-        <S.MenuItem>메뉴 3</S.MenuItem>
-      </S.Menu>
-    </S.NavbarWrapper>
-  );
+	return (
+		<S.NavbarWrapper>
+			<S.LeftSection />
+			<S.CenterSection>
+				<S.LogoContainer>
+					<S.Logo>
+						<img src={LogoImage} alt="Mulmuli Logo" />
+					</S.Logo>
+					<S.LogoText>MULMULI</S.LogoText>
+				</S.LogoContainer>
+			</S.CenterSection>
+			<S.RightSection>
+				<S.IconContainer>
+					<img src={IconSVG} alt="Profile Icon" />
+				</S.IconContainer>
+			</S.RightSection>
+		</S.NavbarWrapper>
+	);
 };
 
 export default Navbar;
