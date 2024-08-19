@@ -16,10 +16,9 @@ export default function RadiusButton(props: ButtonProps) {
         props.isValid ? theme.Colors.primary : theme.Colors.neutral200
       }
     >
-      <Styled.Text
-        color={theme.Colors.white}
-        textAlign={"center"}
-      >{props.content}</Styled.Text>
+      <Styled.Text color={theme.Colors.white} textAlign={"center"}>
+        {props.content}
+      </Styled.Text>
     </Styled.Container>
   );
 }

@@ -1,9 +1,10 @@
 // Router.tsx
-import React from 'react';
-import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
-import { styled } from 'styled-components';
-import Home from './pages/home/Home';
-import Navbar from './components/layouts/Navbart';
+import React from "react";
+import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import { styled } from "styled-components";
+import Home from "./pages/home/Home";
+import Navbar from "./components/layouts/Navbart";
+import Auth from "@pages/auth/Auth";
 
 const Wrapper = styled.div`
   margin: 0 auto;
@@ -31,6 +32,7 @@ export default function Router(): JSX.Element {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index path="/" element={<Home />} />
+          <Route index path="/entry" element={<Auth />} />
         </Route>
       </Routes>
     </BrowserRouter>
