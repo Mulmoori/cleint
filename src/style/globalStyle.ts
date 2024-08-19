@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
   :root {
@@ -78,19 +78,19 @@ export const GlobalStyle = createGlobalStyle`
     user-select: none;
     /* @media (min-width:1800px){
       font-size: 62.5%;
-    }
+    } */
     @media (min-width:1420px) and (max-width:1799px){
-      font-size: 46.8%;
+      font-size: 100%;
     }
     @media (min-width:900px) and (max-width:1419px){
-      font-size: 42%;
+      font-size: 90%;
     }
     @media (min-width: 768px) and (max-width:899px){ 
-      font-size: 35%;
+      font-size: 90%;
     }
     @media (max-width:767px){ 
-      font-size: 32%;
-    } */
+      font-size: 80%;
+    }
     
 
   }
