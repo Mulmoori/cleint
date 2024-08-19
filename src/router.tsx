@@ -11,6 +11,7 @@ import Home from "./pages/home/Home";
 import Navbar from "./components/layouts/Navbart";
 import Profile from "@pages/profile/Profile";
 import Auth from "@pages/auth/Auth";
+import Naruteo from "@pages/naruteo/Naruteo";
 
 const Wrapper = styled.div`
 	margin: 0 auto;
@@ -23,7 +24,10 @@ const Wrapper = styled.div`
 
 const Layout: React.FC = () => {
 	const location = useLocation();
-	const showNavbar = location.pathname !== "/";
+	const showNavbar =
+		location.pathname !== "/entry" &&
+		location.pathname !== "/naruteo" &&
+		location.pathname !== "/";
 
 	return (
 		<Wrapper>
@@ -41,6 +45,8 @@ export default function Router(): JSX.Element {
 					<Route index element={<Auth />} />
 					<Route path="/home" element={<Home />} />
 					<Route path="/profile" element={<Profile />} />
+					<Route path="/entry" element={<Auth />} />
+					<Route path="/naruteo" element={<Naruteo />} />
 				</Route>
 			</Routes>
 		</BrowserRouter>
