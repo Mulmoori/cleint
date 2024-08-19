@@ -45,7 +45,6 @@ export default function Router(): JSX.Element {
 					<Route index element={<Auth />} />
 					<Route path="/home" element={<Home />} />
 					<Route path="/profile" element={<Profile />} />
-					<Route path="/entry" element={<Auth />} />
 					<Route path="/naruteo" element={<Naruteo />} />
 				</Route>
 			</Routes>

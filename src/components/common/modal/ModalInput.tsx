@@ -4,9 +4,7 @@ import styled from "styled-components";
 
 interface ModalInputProps {
     title: string;
-    placeholder: string;
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    text: string
 }
 
 const ModalInputWrapper = styled.div`
@@ -18,7 +16,7 @@ const ModalInputWrapper = styled.div`
     ${theme.Fonts.Body2}
 `;
 
-const ModalInputBox = styled.input`
+const ModalInputBox = styled.div`
     width: 100%;
     padding: 1.4rem;
     border-radius: 12px;
@@ -27,10 +25,6 @@ const ModalInputBox = styled.input`
     border: 1px solid ${theme.Colors.gray};
     ${theme.Fonts.Sub2}
     // placeholder text size
-    ::placeholder {
-        size: 1rem;
-        ${theme.Fonts.Sub2}
-    }
 `;
 const ModalInputTitle = styled.p`
     ${theme.Fonts.Sub1}
@@ -38,19 +32,12 @@ const ModalInputTitle = styled.p`
 `;
 const ModalInput: React.FC<ModalInputProps> = ({
     title,
-    placeholder,
-    value,
-    onChange,
+    text
 }) => {
     return (
         <ModalInputWrapper>
             <ModalInputTitle>{title}</ModalInputTitle>
-            <ModalInputBox
-                type="text"
-                placeholder={placeholder}
-                value={value}
-                onChange={onChange}
-            />
+            <ModalInputBox>{text}</ModalInputBox>
         </ModalInputWrapper>
     );
 };

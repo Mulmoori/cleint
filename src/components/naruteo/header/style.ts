@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {theme} from "../../../style/theme.ts";
 
 export const HeaderWrapper = styled.header`
 	display: flex;
@@ -93,4 +94,10 @@ export const Button = styled.button`
 		padding: 0px 15px;
 		font-size: 14px;
 	}
+`;
+
+
+export const ParticipantCode = styled.h1`
+    ${theme.Fonts.H1};
+    color: ${theme.Colors.neutral};
 `;
