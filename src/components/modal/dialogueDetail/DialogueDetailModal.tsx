@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import * as S from "./style";
 import DoubleRightChevron from "../../../assets/icons/DoubleRightChevron.svg";
 import Microphone from "../../../assets/icons/Microphone.svg";
@@ -7,6 +7,7 @@ import Badge from "@components/common/badge/Badge.tsx";
 import { theme } from "../../../style/theme";
 import { Spacer } from "@components/common/spacer/style.ts";
 import useSpeechToText from "../../../hooks/useSpeechToText.ts";
+import { MicrophoneIcon } from "../../../assets/icons/MicrophoneIcon.tsx";
 
 interface props {
 	onClick: () => void;
@@ -15,6 +16,7 @@ interface props {
 
 export default function DialogueDetailModal(props: props) {
 	const { transcript, listening, toggleListening } = useSpeechToText();
+	const [isListening, setIsListening] = useState(false);
 	const [inputValue, setInputValue] = useState("");
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -42,6 +44,25 @@ export default function DialogueDetailModal(props: props) {
 	const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 		setInputValue(e.target.value);
 	};
+
+	useEffect(() => {
+		console.log("useSpeechToText listening state:", listening);
+		setIsListening(listening);
+	}, [listening]);
+
+	const handleMicrophoneClick = useCallback(() => {
+		console.log("Microphone clicked. Current isListening:", isListening);
+		setIsListening((prevState) => {
+			const newState = !prevState;
+			console.log("New isListening state:", newState);
+			return newState;
+		});
+		toggleListening();
+	}, [isListening, toggleListening]);
+
+	useEffect(() => {
+		console.log("isListening state changed:", isListening);
+	}, [isListening]);
 
 	return (
 		<S.Overlay>
@@ -103,17 +124,15 @@ export default function DialogueDetailModal(props: props) {
 						<SizedBox height={"12px"} />
 						<S.ButtonContainer>
 							<Spacer flex={1} direction={"horizontal"} />
-							<S.SvgIcon
-								src={Microphone}
-								alt="Microphone"
-								width={"24px"}
-								height={"24px"}
+							<MicrophoneIcon
+								width="24px"
+								height="24px"
 								color={
-									listening
+									isListening
 										? theme.Colors.green600
 										: theme.Colors.neutral
 								}
-								onClick={toggleListening}
+								onClick={handleMicrophoneClick}
 							/>
 							<SizedBox width={"12px"} />
 							<S.AnswerButton>답변하기</S.AnswerButton>
