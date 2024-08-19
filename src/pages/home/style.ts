@@ -1,5 +1,5 @@
-import { keyframes, styled } from 'styled-components';
-import { theme } from '../../style/theme';
+import { keyframes, styled } from "styled-components";
+import { theme } from "../../style/theme";
 
 /**
  * PageWrapper
@@ -29,35 +29,40 @@ export const FadeInAnimation = keyframes`
 `;
 
 export const PageWrapper = styled.div`
-  /* 페이지 배경색 설정 */
-  background-color: ${theme.Colors.background};
+    /* 페이지 배경색 설정 */
+    /* background-color: ${theme.Colors.background}; */
 
-  /* 텍스트 색상 설정 */
-  color: ${theme.Colors.black};
+    /* 텍스트 색상 설정 */
+    color: ${theme.Colors.black};
 
-  /* 페이지  양옆 마진 16px  */
-  margin: 0 1rem;
+    /* 페이지  양옆 마진 16px  */
+    margin: 0 4rem;
 
-  /* 페이지 높이를 최소 100vh로 설정 */
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: start;
-  height: 100%;
+    /* 페이지 높이를 최소 100vh로 설정 */
+    min-height: 100vh;
+    max-width: 1920px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    height: 100%;
 
-  animation: ${FadeInAnimation} 0.5s ease-in-out;
+    animation: ${FadeInAnimation} 0.5s ease-in-out;
 `;
 
 // H1 ~ H6 스타일 정의
+export const HomeRoommListHeader = styled.div`
+    width: 100%;
+    display: flex;
+`;
 export const HomeTitle = styled.h1`
-  ${theme.Fonts.H1}
-  margin-top: 1rem;
+    ${theme.Fonts.H1}
+    margin-top: 2rem;
 `;
 
 export const HomeSubTitle = styled.h2`
-  // 폰트
-  ${theme.Fonts.H2}
-  // 색상 
+    // 폰트
+    ${theme.Fonts.H2}
+    // 색상 
   color: ${theme.Colors.red};
 `;
