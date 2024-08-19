@@ -5,6 +5,7 @@ import { styled } from "styled-components";
 import Home from "./pages/home/Home";
 import Navbar from "./components/layouts/Navbart";
 import Profile from "@pages/profile/Profile";
+import Auth from "@pages/auth/Auth";
 
 const Wrapper = styled.div`
 	margin: 0 auto;
@@ -33,6 +34,7 @@ export default function Router(): JSX.Element {
 				<Route path="/" element={<Layout />}>
 					<Route index path="/" element={<Home />} />
 					<Route path="/profile" element={<Profile />} />
+					<Route index path="/entry" element={<Auth />} />
 				</Route>
 			</Routes>
 		</BrowserRouter>

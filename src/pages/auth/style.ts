@@ -1,5 +1,5 @@
-import { styled } from 'styled-components';
-import { theme } from '../../style/theme';
+import { styled } from "styled-components";
+import { theme } from "../../style/theme";
 
 /**
  * PageWrapper
@@ -23,4 +23,12 @@ export const PageWrapper = styled.div`
 
   /* 페이지 높이를 최소 100vh로 설정 */
   min-height: 100vh;
+`;
+
+export const Container = styled.div`
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
