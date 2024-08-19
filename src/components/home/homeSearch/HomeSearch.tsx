@@ -1,7 +1,8 @@
 import { useState } from "react";
 import * as S from "./style";
-import CustomModal from "@components/common/Modal";
-import ModalInput from "@components/common/ModalInput";
+import CustomModal from "@components/common/modal/Modal";
+import ModalInput from "@components/common/modal/ModalInput";
+import CustomAlert from "@components/common/alert/Alert";
 
 interface JoinState {
     joinCode: string;
@@ -13,21 +14,36 @@ export default function HomeSearch(): JSX.Element {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [modalType, setModalType] = useState<"create" | "join" | null>(null);
     const [roomName, setRoomName] = useState<string>("");
+    const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
+    const [alertMessage, setAlertMessage] = useState<string>("");
 
     const [joinState, setJoinState] = useState<JoinState>({
         joinCode: "",
         name: "",
     });
 
+    const alertOpen = (message: string) => {
+        setAlertMessage(message);
+        setIsAlertOpen(true);
+    };
+
+    const alertClose = () => {
+        setIsAlertOpen(false);
+        setAlertMessage("");
+    };
+
     const openModal = (type: "create" | "join") => {
-        setModalType(type);
-        setIsModalOpen(true);
+        if (type === "join" && search === "") {
+            alertOpen("참여 코드를 입력해주세요");
+            return; // 모달이 뜨지 않도록 return
+        }
+
         if (type === "create") {
             setRoomName("");
-        } else if (type === "join" && search === "") {
-            alert("참여 코드를 입력해주세요");
-            return;
         }
+
+        setModalType(type);
+        setIsModalOpen(true);
     };
 
     const closeModal = () => {
@@ -43,7 +59,7 @@ export default function HomeSearch(): JSX.Element {
 
     const handleCreateRoom = () => {
         if (roomName === "") {
-            alert("나루터 이름을 입력해주세요");
+            alertOpen("나루터 이름을 입력해주세요");
             return;
         }
         console.log("나루터 이름 :" + roomName);
@@ -54,7 +70,7 @@ export default function HomeSearch(): JSX.Element {
 
     const handleJoinRoom = () => {
         if (joinState.name === "" || joinState.joinCode === "") {
-            alert("참여 코드와 이름을 입력해주세요");
+            alertOpen("참여 코드와 이름을 입력해주세요");
             return;
         }
         console.log("참여코드 :" + search);
@@ -150,6 +166,14 @@ export default function HomeSearch(): JSX.Element {
                     }
                     text1={modalType === "create" ? "개설하기" : "참여하기"}
                     text2="취소하기"
+                />
+            )}
+
+            {isAlertOpen && (
+                <CustomAlert
+                    description={alertMessage}
+                    onOk={alertClose}
+                    text="확인"
                 />
             )}
         </S.HomeSearchhWrapper>

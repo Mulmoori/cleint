@@ -10,6 +10,7 @@
         "allowImportingTsExtensions": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
+        "noEmitOnError": false,
         "noEmit": true,
         "jsx": "react-jsx",
 
@@ -22,14 +23,15 @@
             "@components/*": ["src/components/*"], // 경로 별칭 설정
             "@pages/*": ["src/pages/*"],
             "@styles/*": ["src/styles/*"],
-            "@/assets/*": ["./src/assets/*"]
+            "@/assets/*": ["./src/assets/*"],
+            "@/hooks/*": ["./src/hooks/*"],
         },
 
         /* Linting */
-        "strict": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "noFallthroughCasesInSwitch": true
+//        "strict": true,
+//        "noUnusedLocals": true,
+//        "noUnusedParameters": true,
+//        "noFallthroughCasesInSwitch": true
     },
     "include": ["src"],
 

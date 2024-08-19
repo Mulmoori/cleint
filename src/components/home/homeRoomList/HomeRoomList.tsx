@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import * as S from "./style";
 import { theme } from "../../../style/theme";
-import Badge from "@components/common/Badge";
+import Badge from "@components/common/badge/Badge";
 
 interface Room {
     id: number;
