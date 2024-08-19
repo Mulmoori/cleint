@@ -9,12 +9,24 @@ export const HeaderWrapper = styled.header`
 	align-items: center;
 	border-bottom: 1.333px solid var(--neutral-200, #eaeaf6);
 	background: var(--Primary-0, #fff);
+
+	@media (max-width: 768px) {
+		padding: 15px 20px;
+		flex-direction: column;
+		align-items: flex-start;
+	}
 `;
 
 export const LeftSection = styled.div`
 	display: flex;
 	align-items: center;
-	gap: 20px; // SVG와 텍스트 사이의 간격
+	gap: 20px;
+
+	@media (max-width: 768px) {
+		width: 100%;
+		justify-content: space-between;
+		margin-bottom: 15px;
+	}
 `;
 
 export const Logo = styled.div`
@@ -33,13 +45,30 @@ export const Title = styled.h1`
 	font-style: normal;
 	font-weight: 700;
 	line-height: 36px;
+
+	@media (max-width: 1024px) {
+		font-size: 28px;
+		line-height: 28px;
+	}
+
+	@media (max-width: 768px) {
+		font-size: 24px;
+		line-height: 24px;
+	}
 `;
 
 export const ButtonContainer = styled.div`
 	display: flex;
 	gap: 10px;
-	margin-left: auto; // 버튼을 오른쪽으로 밀어냄
-	padding-left: 20px; // 왼쪽 요소들과의 간격
+	margin-left: auto;
+	padding-left: 20px;
+
+	@media (max-width: 768px) {
+		width: 100%;
+		margin-left: 0;
+		padding-left: 0;
+		justify-content: flex-end;
+	}
 `;
 
 export const Button = styled.button`
@@ -59,4 +88,9 @@ export const Button = styled.button`
 	font-style: normal;
 	font-weight: 500;
 	line-height: 20px;
+
+	@media (max-width: 768px) {
+		padding: 0px 15px;
+		font-size: 14px;
+	}
 `;
