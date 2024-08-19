@@ -1,6 +1,11 @@
-// Router.tsx
 import React from "react";
-import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import {
+	BrowserRouter,
+	Outlet,
+	Route,
+	Routes,
+	useLocation,
+} from "react-router-dom";
 import { styled } from "styled-components";
 import Home from "./pages/home/Home";
 import Navbar from "./components/layouts/Navbart";
@@ -17,13 +22,14 @@ const Wrapper = styled.div`
 `;
 
 const Layout: React.FC = () => {
+	const location = useLocation();
+	const showNavbar = location.pathname !== "/entry";
+
 	return (
-		<>
-			<Wrapper>
-				<Navbar />
-				<Outlet />
-			</Wrapper>
-		</>
+		<Wrapper>
+			{showNavbar && <Navbar />}
+			<Outlet />
+		</Wrapper>
 	);
 };
 
@@ -31,10 +37,10 @@ export default function Router(): JSX.Element {
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route path="/" element={<Layout />}>
-					<Route index path="/" element={<Home />} />
+				<Route element={<Layout />}>
+					<Route index element={<Home />} />
 					<Route path="/profile" element={<Profile />} />
-					<Route index path="/entry" element={<Auth />} />
+					<Route path="/entry" element={<Auth />} />
 				</Route>
 			</Routes>
 		</BrowserRouter>
