@@ -6,6 +6,7 @@ import RadiusButton from "@components/common/button/radius-button/RadiusButton.t
 import InputField from "@components/common/input-field/InputField.tsx";
 import { CONSTANT } from "../../../../constants/Constant.ts";
 import Label from "@components/common/input-field/label/Label.tsx";
+import instance from "../../../../api/axios.ts";
 
 interface props {
   onClick: () => void;
@@ -26,13 +27,28 @@ export default function SingInForm(props: props) {
     setPassword(e.target.value);
   };
 
-  const handleLogin = () => {
-    console.log(email, password);
-
-    // Todo: 로그인 로직 구현
+  const handleLogin = async () => {
 
     if (isValid) {
-      navigate("/");
+      const formData = new FormData();
+
+      formData.append("serial_id", email);
+      formData.append("password", password);
+
+      try {
+        const response = await instance.post("/api/auth/login", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          },
+        });
+
+        if (response.status === 200) {
+          navigate("/");
+        }
+      } catch (error) {
+        console.error(error);
+        alert("로그인에 실패했습니다.");
+      }
     }
   };
 
