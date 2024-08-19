@@ -1,4 +1,4 @@
-import { FaRadiation } from "react-icons/fa";
+import FaRadiation from "../../../assets/fishing-float-2.svg"
 import { theme } from "../../../style/theme";
 import { styled } from "styled-components";
 

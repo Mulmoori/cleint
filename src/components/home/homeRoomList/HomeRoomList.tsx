@@ -44,7 +44,7 @@ export default function HomeRoomList(): JSX.Element {
                     description: "",
                     currentHeadCount: room.participant_count,
                     isOnline: room.is_connection_host,
-                    createdAt: calculateTime(new Date(room.participated_at))
+                    createdAt: room.participated_at
                 }));
 
                 setRooms(rooms);
@@ -74,7 +74,6 @@ export default function HomeRoomList(): JSX.Element {
                 rooms.map((room) => (
                     <S.HomeRoomListItem key={room.id} isOnline={room.isOnline} onClick={() => handleRoomClick(room.id)}>
                         <S.HomeRoomTitleWrapper>
-                            <S.HomeRoomListIcon />
                             <S.HomeRoomListItemTitle>
                                 {room.title}
                             </S.HomeRoomListItemTitle>

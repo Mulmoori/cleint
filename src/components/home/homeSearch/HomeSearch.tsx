@@ -87,8 +87,6 @@ export default function HomeSearch(): JSX.Element {
 
             if (response.status === 201) {
                 alertOpen("나루터가 개설되었습니다.");
-                setNarooteoId(response.data.data.id);
-                navigate("/naruteo");
             }
         } catch (error) {
             console.error(error);
@@ -111,7 +109,7 @@ export default function HomeSearch(): JSX.Element {
 
                 // sleep
                 await new Promise((resolve) => setTimeout(resolve, 2000));
-                navigate("/naruteo");
+                // navigate("/naruteo");
             }
         } catch (error) {
             console.error(error);
