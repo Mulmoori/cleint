@@ -1,5 +1,5 @@
 import React from "react";
-import { theme } from "../../style/theme";
+import { theme } from "../../../style/theme";
 import styled from "styled-components";
 
 interface ModalInputProps {
