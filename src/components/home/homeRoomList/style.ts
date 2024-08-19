@@ -59,7 +59,8 @@ export const HomeRoomListItem = styled.div<HomeRoomListItemProps>`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    box-shadow: 2px 12px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
 `;
 export const HomeRoomListItemTitle = styled.h2`
     ${theme.Fonts.H2}
@@ -90,7 +91,7 @@ export const HomeRoomListEmpty = styled.div`
     align-items: center;
     color: ${theme.Colors.neutral};
     ${theme.Fonts.Sub2}
-    box-shadow: 2px 12px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
 `;
 
 export const HomeRoomFooter = styled.div`
