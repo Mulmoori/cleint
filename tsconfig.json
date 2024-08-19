@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Additional Options */
+    "esModuleInterop": true, // CommonJS와 ES Module 간의 상호 운용성 보장
+    "forceConsistentCasingInFileNames": true, // 파일 및 폴더 이름의 대소문자 일관성 강제
+    "allowSyntheticDefaultImports": true, // default import를 사용할 수 있도록 허용
+    "baseUrl": "./", // 기본 경로를 현재 디렉토리로 설정
+    "paths": {
+      "@components/*": ["src/components/*"], // 경로 별칭 설정
+      "@pages/*": ["src/pages/*"],
+      "@styles/*": ["src/styles/*"]
+    },
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src"],
+
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
