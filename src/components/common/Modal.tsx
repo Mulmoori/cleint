@@ -28,6 +28,7 @@ const ButtonContainer = styled.div`
     justify-content: center;
     align-items: center;
     gap: 1rem;
+    margin-top: 2rem;
 `;
 
 const StyledButton = styled.button<StyledButtonProps>`
@@ -43,7 +44,7 @@ const StyledButton = styled.button<StyledButtonProps>`
     ${({ colorCode }) => css`
         background-color: ${colorCode};
     `}
-    ${theme.Fonts.H1};
+    ${theme.Fonts.H2};
 `;
 
 const Container = styled.div`
@@ -78,6 +79,7 @@ interface CustomModalProps {
     onCancel: () => void;
     text1: string;
     text2: string;
+    // joinCode?: string;
 }
 
 const CustomModal: React.FC<CustomModalProps> = ({

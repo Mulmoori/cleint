@@ -23,7 +23,7 @@ const ModalInputBox = styled.input`
     padding: 1.4rem;
     border-radius: 12px;
     margin-top: 0.5rem;
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
     border: 1px solid ${theme.Colors.gray};
     ${theme.Fonts.Sub2}
     // placeholder text size
