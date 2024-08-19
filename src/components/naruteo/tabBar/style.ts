@@ -1,10 +1,14 @@
 import styled from "styled-components";
+import {theme} from "../../../style/theme.ts";
 
 export const TabBarContainer = styled.div`
 	display: flex;
+	flex-direction: column;
 	width: 100%;
 	height: 76px;
 	background: var(--white, #fff);
+	
+	align-items: center;
 `;
 
 interface TabProps {
@@ -37,5 +41,34 @@ export const Tab = styled.div<TabProps>`
 
 	&:hover {
 		background: var(--neutral-100, #f5f5ff);
+	}
+`;
+
+
+export const InputContainer = styled.div`
+	display: flex;
+	border: 1px solid ${theme.Colors.neutral300};
+	
+	width: 600px;
+	height: 120px;
+
+	border-radius: 12px;
+`;
+
+export const Input = styled.textarea`
+	width: 100%;
+	padding: 20px;
+	font-size: 14px;
+	box-sizing: border-box;
+	border: none;
+	outline: none;
+	resize: none;
+	overflow: hidden;
+	min-height: 80px;
+	line-height: 1.5;
+
+	&:focus,
+	&:not(:placeholder-shown) {
+		height: auto;
 	}
 `;

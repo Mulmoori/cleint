@@ -2,9 +2,8 @@ import Header from "@components/naruteo/header/header";
 import * as S from "./style";
 import TabBar from "@components/naruteo/tabBar/tabBar";
 import {useEffect, useState} from "react";
-import {useRecoilState} from "recoil";
-import {narooteoState} from "../../context/narooteoState.ts";
 import instance from "../../api/axios.ts";
+import {useParams} from "react-router-dom";
 
 interface NarooteoProps {
 	id: number;
@@ -16,7 +15,7 @@ interface NarooteoProps {
 
 export default function Naruteo(): JSX.Element {
 
-	const narooteoId = useRecoilState(narooteoState);
+	const { id } = useParams();
 	const [narooteo, setNarooteo] = useState<NarooteoProps>({
 		id: 0,
 		hostNickname: "",
@@ -25,9 +24,11 @@ export default function Naruteo(): JSX.Element {
 		isHost: false
 	});
 
+	const [loading, setLoading] = useState<boolean>(true);
+
 	const fetchNarooteo = async () => {
 		try {
-			const response = await instance.get(`/api/v1/narooteos/${narooteoId}/summaries`);
+			const response = await instance.get(`/api/v1/narooteos/${id}/summaries`);
 
 			if (response.status === 200) {
 				setNarooteo({
@@ -40,6 +41,8 @@ export default function Naruteo(): JSX.Element {
 			}
 		} catch (error) {
 			console.error(error);
+		} finally {
+			setLoading(false);
 		}
 	}
 
@@ -47,10 +50,15 @@ export default function Naruteo(): JSX.Element {
 		fetchNarooteo().then(r => r);
 	}, []);
 
+	if (loading) {
+		return <S.PageWrapper>
+		</S.PageWrapper>;
+	}
+
 	return (
 		<S.PageWrapper>
-			<Header />
-			<TabBar />
+			<Header hostNickname={narooteo.hostNickname} id={narooteo.id} isHost={narooteo.isHost} participationCode={narooteo.participationCode} title={narooteo.title}/>
+			<TabBar id={narooteo.id} isHost={narooteo.isHost} />
 		</S.PageWrapper>
 	);
 }

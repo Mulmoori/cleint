@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import * as S from "./style";
 import { theme } from "../../../style/theme";
 import Badge from "@components/common/badge/Badge";
+import instance from "../../../api/axios.ts";
+import {calculateTime} from "../../../utils/DateTimeUtils.ts";
+import {useRecoilState} from "recoil";
+import {narooteoState} from "../../../context/narooteoState.ts";
+import {useNavigate} from "react-router-dom";
 
 interface Room {
     id: number;
@@ -12,79 +17,51 @@ interface Room {
     createdAt: string;
 }
 
+interface ResponseWrapper {
+    id: number;
+    title: string;
+    is_connection_host: boolean;
+    participant_count: number;
+    participated_at: string;
+}
+
 export default function HomeRoomList(): JSX.Element {
     // room dummy data
     const [rooms, setRooms] = useState<Room[]>([]);
+    const [selectedRoomId, setSelectedRoomId] = useRecoilState(narooteoState);
+    const navigate = useNavigate();
 
-    const ROOM_DUMMY_DATA: Room[] = [
-        {
-            id: 1,
-            title: "객체지향 프로그래밍",
-            description: "방 설명1",
-            currentHeadCount: 2,
-            isOnline: true,
-            createdAt: "2021-08-01",
-        },
-        {
-            id: 2,
-            title: "방 제목2",
-            description: "방 설명2",
-            currentHeadCount: 3,
-            isOnline: false,
-            createdAt: "2021-08-02",
-        },
-        {
-            id: 3,
-            title: "방 제목3",
-            description: "방 설명3",
-            currentHeadCount: 4,
-            isOnline: true,
-            createdAt: "2021-08-03",
-        },
-        {
-            id: 4,
-            title: "방 제목3",
-            description: "방 설명3",
-            currentHeadCount: 4,
-            isOnline: true,
-            createdAt: "2021-08-03",
-        },
-        {
-            id: 5,
-            title: "방 제목3",
-            description: "방 설명3",
-            currentHeadCount: 4,
-            isOnline: true,
-            createdAt: "2021-08-03",
-        },
-        {
-            id: 6,
-            title: "방 제목3",
-            description: "방 설명3",
-            currentHeadCount: 4,
-            isOnline: true,
-            createdAt: "2021-08-03",
-        },
-        {
-            id: 7,
-            title: "방 제목3",
-            description: "방 설명3",
-            currentHeadCount: 4,
-            isOnline: true,
-            createdAt: "2021-08-03",
-        },
-        {
-            id: 8,
-            title: "방 제목3",
-            description: "방 설명3",
-            currentHeadCount: 4,
-            isOnline: true,
-            createdAt: "2021-08-03",
-        },
-    ];
+    const fetchRooms = async () => {
+        try {
+            const response = await instance.get('/api/v1/users/narooteos/overviews');
+
+            if (response.status === 200) {
+                const data: ResponseWrapper[] = response.data.data.overviews;
+
+                const rooms: Room[] = data.map((room) => ({
+                    id: room.id,
+                    title: room.title,
+                    description: "",
+                    currentHeadCount: room.participant_count,
+                    isOnline: room.is_connection_host,
+                    createdAt: calculateTime(new Date(room.participated_at))
+                }));
+
+                setRooms(rooms);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const handleRoomClick = (roomId: number) => {
+        setSelectedRoomId(roomId);
+
+        navigate(`/naruteo/${roomId}`);
+    }
 
     useEffect(() => {
-        setRooms(ROOM_DUMMY_DATA);
+        fetchRooms().then(r => r);
     }, []);
 
     return (
@@ -95,7 +72,7 @@ export default function HomeRoomList(): JSX.Element {
                 </S.HomeRoomListEmpty>
             ) : (
                 rooms.map((room) => (
-                    <S.HomeRoomListItem key={room.id} isOnline={room.isOnline}>
+                    <S.HomeRoomListItem key={room.id} isOnline={room.isOnline} onClick={() => handleRoomClick(room.id)}>
                         <S.HomeRoomTitleWrapper>
                             <S.HomeRoomListIcon />
                             <S.HomeRoomListItemTitle>

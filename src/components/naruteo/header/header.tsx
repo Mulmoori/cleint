@@ -9,7 +9,7 @@ import {Spacer} from "@components/common/spacer/style.ts";
 import {SizedBox} from "@components/common/sized-box/style.ts";
 import CopyButton from "../../../assets/icons/CopyButton.svg";
 
-interface NarooteoProps {
+interface props {
 	id: number;
 	hostNickname: string;
 	title: string;
@@ -17,14 +17,13 @@ interface NarooteoProps {
 	isHost: boolean;
 }
 
-const Header: React.FC = (props: NarooteoProps) => {
+export default function Header(props: props) {
 
-	const narooteoId = useRecoilState(narooteoState);
 	const navigate = useNavigate();
 
 	const handleExit = async () => {
 		try {
-			const response = await instance.delete(`/api/v1/users/narooteos/${narooteoId}`);
+			const response = await instance.delete(`/api/v1/users/narooteos/${props.id}`);
 
 			if (response.status === 204) {
 				alert("나루터를 성공적으로 나가셨습니다.");
@@ -66,5 +65,3 @@ const Header: React.FC = (props: NarooteoProps) => {
 		</S.HeaderWrapper>
 	);
 };
-
-export default Header;

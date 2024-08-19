@@ -4,51 +4,63 @@ import QuestionBoxList from "../questionBoxList/questionBoxList";
 import instance from "../../../api/axios.ts";
 import {useRecoilState} from "recoil";
 import {narooteoState} from "../../../context/narooteoState.ts";
+import SizedBox from "@components/common/sized-box/SizedBox.tsx";
 
-const generateDummyQuestions = (count: number) => {
-	return Array(count)
-		.fill(null)
-		.map((_, index) => ({
-			title: `무능한 하마 ${index + 1}`,
-			content:
-				"질문이 머예요? 먹는건가요? 저보고 하라고요? 어쩌라고요? 킹받죠? 질문이 머예요? 먹는건가요? 저보고 하라고요? 어쩌라고요? 킹받죠? 질문이 머예요? 먹는건가요? 저보고 하라고요? 어쩌라고요? 킹받죠? 질문이 머예요? 먹는건가요? 저보고 하라고요? 어쩌라고요? 킹받죠? 질문이 머예요? 먹는건가요? 저보고 하라고요? 어쩌라고요? 킹받죠? 질문이 머예요? 먹는건가요? 저보고 하라고요? 어쩌라고요? 킹받죠? 질문이 머예요? 먹는건가요? 저보고 하라고요? 어쩌라고요? 킹받...",
-			timestamp: `${Math.floor(Math.random() * 60)}분 전 작성`,
-			status: ["답변 전", "관리자 답변", "AI답변"][
-				Math.floor(Math.random() * 3)
-			],
-		}));
-};
+interface props {
+	isHost: boolean;
+	id: number;
+}
 
-const TabBar: React.FC = () => {
-	const [activeTab, setActiveTab] = useState<"전체질문방" | "나의질문방">(
-		"전체질문방"
-	);
+interface ResponseWrapper {
+	id: number;
+	user_random_name: string;
+	status: string;
+	question: string;
+	asked_at: string;
+}
 
-	const narooteoId = useRecoilState(narooteoState);
+export default function TabBar(props: props) {
 
-	const questions =
-		activeTab === "전체질문방"
-			? generateDummyQuestions(6)
-			: generateDummyQuestions(4);
+	const [inputValue, setInputValue] = useState<string>("");
+
+	const [questions, setQuestions] = useState<ResponseWrapper[]>([]);
+
+	const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+		setInputValue(e.target.value);
+	}
 
 	const fetchTotalQuestions = async () => {
 		try {
-			const response = await instance.get(`/api/v1/narooteos/${narooteoId}/dialogues`);
+			const response = await instance.get(`/api/v1/narooteos/${props.id}/dialogues`);
 
 			if (response.status === 200) {
-				console.log(response.data.data);
+				const data: ResponseWrapper[] = response.data.data.overviews;
+
+				const questionsData = data.map((question) => ({
+					id: question.id,
+					user_random_name: question.user_random_name,
+					status: question.status,
+					question: question.question,
+					asked_at: question.asked_at
+				}));
+
+				setQuestions(questionsData);
 			}
 		} catch (error) {
 			console.error(error);
 		}
 	}
 
-	const fetchMyQuestions = async () => {
+	const submitQuestion = async () => {
 		try {
-			const response = await instance.get(`/api/v1/narooteos/${narooteoId}/users/dialogues`);
+			const response = await instance.post('/api/v1/dialogues',
+				{
+					narooteo_id: props.id,
+					question: inputValue
+				});
 
-			if (response.status === 200) {
-				console.log(response.data.data);
+			if (response.status === 201) {
+				alert("질문이 성공적으로 등록되었습니다.");
 			}
 		} catch (error) {
 			console.error(error);
@@ -56,32 +68,27 @@ const TabBar: React.FC = () => {
 	}
 
 	useEffect(() => {
-		if (activeTab === "전체질문방") {
-			fetchTotalQuestions().then(r => r);
-		} else {
-			fetchMyQuestions().then(r => r);
-		}
-	}, [activeTab]);
+		fetchTotalQuestions().then(r => r);
+	}, []);
 
 	return (
 		<>
+			<SizedBox height={"40px"} />
 			<S.TabBarContainer>
-				<S.Tab
-					isActive={activeTab === "전체질문방"}
-					onClick={() => setActiveTab("전체질문방")}
-				>
-					전체질문방
-				</S.Tab>
-				<S.Tab
-					isActive={activeTab === "나의질문방"}
-					onClick={() => setActiveTab("나의질문방")}
-				>
-					나의질문방
-				</S.Tab>
+				{
+					!props.isHost && (
+						<S.InputContainer>
+							<S.Input
+								placeholder={"질문을 작성해주세요"}
+								value={inputValue}
+								onChange={handleInputChange}
+							/>
+							<button onClick={submitQuestion}>질문</button>
+						</S.InputContainer>
+					)
+				}
 			</S.TabBarContainer>
-			<QuestionBoxList questions={questions} />
+			<QuestionBoxList questions={questions} isHost={props.isHost}/>
 		</>
 	);
 };
-
-export default TabBar;

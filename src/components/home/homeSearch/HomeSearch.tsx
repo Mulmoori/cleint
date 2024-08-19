@@ -1,7 +1,7 @@
 import { useState } from "react";
 import * as S from "./style";
 import CustomModal from "@components/common/modal/Modal";
-import ModalInput from "@components/common/modal/ModalInput";
+import ModalInput, {ModalContentDiv} from "@components/common/modal/ModalInput";
 import CustomAlert from "@components/common/alert/Alert";
 import instance from "../../../api/axios.ts";
 import {useRecoilState} from "recoil";
@@ -108,6 +108,9 @@ export default function HomeSearch(): JSX.Element {
             if (response.status === 201) {
                 alertOpen("나루터에 참여되었습니다.");
                 setNarooteoId(narooteoBrief.id);
+
+                // sleep
+                await new Promise((resolve) => setTimeout(resolve, 2000));
                 navigate("/naruteo");
             }
         } catch (error) {
@@ -131,11 +134,11 @@ export default function HomeSearch(): JSX.Element {
         if (modalType === "join") {
             return (
                 <>
-                    <ModalInput
+                    <ModalContentDiv
                         title="이름"
                         text={narooteoBrief.title}
                     />
-                    <ModalInput
+                    <ModalContentDiv
                         title="개설자"
                        text={narooteoBrief.hostNickname}
                     />

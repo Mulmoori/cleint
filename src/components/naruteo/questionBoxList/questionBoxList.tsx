@@ -4,24 +4,29 @@ import DialogueDetailModal from "../../modal/dialogueDetail/DialogueDetailModal"
 import { ListContainer } from "./style";
 
 interface QuestionData {
-	title: string;
-	content: string;
-	timestamp: string;
+	id: number;
+	user_random_name: string;
 	status: string;
+	question: string;
+	asked_at: string;
 }
 
 interface QuestionBoxListProps {
 	questions: QuestionData[];
+	isHost: boolean;
 }
 
-const QuestionBoxList: React.FC<QuestionBoxListProps> = ({ questions }) => {
+const QuestionBoxList: React.FC<QuestionBoxListProps> = ({ questions, isHost }) => {
 	const [selectedQuestion, setSelectedQuestion] =
 		useState<QuestionData | null>(null);
 	const [isModalVisible, setIsModalVisible] = useState(false);
 
+	const [dialogueId, setDialogueId] = useState<number | null>(null);
+
 	const handleQuestionClick = (question: QuestionData) => {
 		setSelectedQuestion(question);
 		setIsModalVisible(true);
+		setDialogueId(question.id);
 	};
 
 	const handleCloseModal = () => {
@@ -35,9 +40,9 @@ const QuestionBoxList: React.FC<QuestionBoxListProps> = ({ questions }) => {
 				{questions.map((question, index) => (
 					<QuestionBox
 						key={index}
-						title={question.title}
-						content={question.content}
-						timestamp={question.timestamp}
+						title={question.user_random_name}
+						content={question.question}
+						timestamp={question.asked_at}
 						status={question.status}
 						onClick={() => handleQuestionClick(question)}
 					/>
@@ -45,9 +50,11 @@ const QuestionBoxList: React.FC<QuestionBoxListProps> = ({ questions }) => {
 			</ListContainer>
 			{selectedQuestion && (
 				<DialogueDetailModal
+					isHost={isHost}
+					userRandomName={selectedQuestion.user_random_name}
 					isVisible={isModalVisible}
 					onClick={handleCloseModal}
-					question={selectedQuestion}
+					dialogueId={dialogueId}
 				/>
 			)}
 		</>

@@ -8,25 +8,52 @@ import { theme } from "../../../style/theme";
 import { Spacer } from "@components/common/spacer/style.ts";
 import useSpeechToText from "../../../hooks/useSpeechToText.ts";
 import { MicrophoneIcon } from "../../../assets/icons/MicrophoneIcon.tsx";
+import instance from "../../../api/axios.ts";
+import {calculateTime} from "../../../utils/DateTimeUtils.ts";
+import {Simulate} from "react-dom/test-utils";
+import toggle = Simulate.toggle;
 
 interface props {
 	onClick: () => void;
 	isVisible: boolean;
+	dialogueId: number;
+	userRandomName: string;
+	isHost: boolean;
 }
 
-export default function DialogueDetailModal(props: props) {
+interface ResponseWrapper {
+	id: number;
+	question: string;
+	asked_at: string;
+	answer?: string;
+	replied_at?: string;
+	is_answered_by_llm?: string;
+}
+
+export default function DialogueDetailModal(props: props): any {
 	const { transcript, listening, toggleListening } = useSpeechToText();
-	const [isListening, setIsListening] = useState(false);
+
+	const [questionDetail, setQuestionDetail] = useState<ResponseWrapper>();
 	const [inputValue, setInputValue] = useState("");
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-	const content =
-		"질문이 머예요? 먹는건가요? 저보고 하라고요? 어쩌라고요? 킹받죠? ..."; // 긴 내용 생략
-	const adminAnswer = false;
-	const isAnswered = false;
-	const isAdmin = true;
-	const answer =
-		"질문이 머예요? 먹는건가요? 저보고 하라고요? 어쩌라고요? 킹받죠? ..."; // 긴 내용 생략
+	const fetchQuestionDetail = async () => {
+		try {
+			const response = await instance.get(`/api/v1/dialogues/${props.dialogueId}`);
+
+			if (response.status === 200) {
+				const data: ResponseWrapper = response.data.data;
+
+				setQuestionDetail(data);
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
+	useEffect(() => {
+		fetchQuestionDetail().then(r => r);
+	}, []);
 
 	useEffect(() => {
 		if (transcript) {
@@ -45,101 +72,96 @@ export default function DialogueDetailModal(props: props) {
 		setInputValue(e.target.value);
 	};
 
-	useEffect(() => {
-		console.log("useSpeechToText listening state:", listening);
-		setIsListening(listening);
-	}, [listening]);
+	const handleAnswer = async () => {
+		try {
+			const response = await instance.put(`/api/v1/dialogues/${props.dialogueId}/answer`, {
+				answer: inputValue,
+				is_using_stt: true
+			});
 
-	const handleMicrophoneClick = useCallback(() => {
-		console.log("Microphone clicked. Current isListening:", isListening);
-		setIsListening((prevState) => {
-			const newState = !prevState;
-			console.log("New isListening state:", newState);
-			return newState;
-		});
-		toggleListening();
-	}, [isListening, toggleListening]);
+			if (response.status === 201) {
+				alert("답변이 성공적으로 등록되었습니다.");
+			}
+		} catch (error) {
+			console.error(error);
+		}
 
-	useEffect(() => {
-		console.log("isListening state changed:", isListening);
-	}, [isListening]);
+		return (
+			<S.Overlay>
+				<S.Container isVisible={props.isVisible}>
+					<S.SvgIcon
+						src={DoubleRightChevron}
+						alt="DoubleRightChevron"
+						onClick={props.onClick}
+						width={"32px"}
+						height={"32px"}
+					/>
+					<SizedBox height={"40px"}/>
+					<S.Row>
+						<S.Title>🚀 ${props.userRandomName}</S.Title>
+						<S.CreatedAt>{calculateTime(new Date(questionDetail.asked_at))}</S.CreatedAt>
+					</S.Row>
+					<SizedBox height={"20px"}/>
+					<S.Content>{questionDetail.question}</S.Content>
+					<SizedBox height={"40px"}/>
+					<S.Line/>
+					<SizedBox height={"40px"}/>
+					{!props &&
+						(questionDetail.answer != null ? (
+							<>
+								<S.Row>
+									<Badge
+										text={
+											!questionDetail.is_answered_by_llm ? "관리자 답변" : "AI 답변"
+										}
+										color={
+											!questionDetail.is_answered_by_llm
+												? theme.Colors.primary
+												: theme.Colors.green
+										}
+										textColor={theme.Colors.white}
+									/>
+									<S.CreatedAt>작성날짜: 2021-08-01</S.CreatedAt>
+								</S.Row>
+								<SizedBox height={"20px"}/>
+								<S.Content>{questionDetail.answer}</S.Content>
+							</>
+						) : (
+							<S.Empty>
+								이전에 유사한 질문이 없었어요... 관리자가 답변을
+								작성하기 전입니다...
+							</S.Empty>
+						))}
 
-	return (
-		<S.Overlay>
-			<S.Container isVisible={props.isVisible}>
-				<S.SvgIcon
-					src={DoubleRightChevron}
-					alt="DoubleRightChevron"
-					onClick={props.onClick}
-					width={"32px"}
-					height={"32px"}
-				/>
-				<SizedBox height={"40px"} />
-				<S.Row>
-					<S.Title>🚀 대화 상세</S.Title>
-					<S.CreatedAt>참여날짜: 2021-08-01</S.CreatedAt>
-				</S.Row>
-				<SizedBox height={"20px"} />
-				<S.Content>{content}</S.Content>
-				<SizedBox height={"40px"} />
-				<S.Line />
-				<SizedBox height={"40px"} />
-				{!isAdmin &&
-					(isAnswered ? (
+					{props.isHost && questionDetail.answer === null && (
 						<>
-							<S.Row>
-								<Badge
-									text={
-										adminAnswer ? "관리자 답변" : "AI 답변"
-									}
-									color={
-										adminAnswer
-											? theme.Colors.primary
-											: theme.Colors.green
-									}
-									textColor={theme.Colors.white}
+							<S.InputContainer>
+								<S.Input
+									placeholder={"답변을 작성해주세요"}
+									value={inputValue}
+									onChange={handleInputChange}
 								/>
-								<S.CreatedAt>작성날짜: 2021-08-01</S.CreatedAt>
-							</S.Row>
-							<SizedBox height={"20px"} />
-							<S.Content>{answer}</S.Content>
+							</S.InputContainer>
+							<SizedBox height={"12px"}/>
+							<S.ButtonContainer>
+								<Spacer flex={1} direction={"horizontal"}/>
+								<MicrophoneIcon
+									width="24px"
+									height="24px"
+									color={
+										listening
+											? theme.Colors.green600
+											: theme.Colors.neutral
+									}
+									onClick={toggleListening}
+								/>
+								<SizedBox width={"12px"}/>
+								<S.AnswerButton onClick={handleAnswer}>답변하기</S.AnswerButton>
+							</S.ButtonContainer>
 						</>
-					) : (
-						<S.Empty>
-							이전에 유사한 질문이 없었어요... 관리자가 답변을
-							작성하기 전입니다...
-						</S.Empty>
-					))}
-
-				{isAdmin && !isAnswered && (
-					<>
-						<S.InputContainer>
-							<S.Input
-								ref={textareaRef}
-								placeholder={"답변을 작성해주세요"}
-								value={inputValue}
-								onChange={handleInputChange}
-							/>
-						</S.InputContainer>
-						<SizedBox height={"12px"} />
-						<S.ButtonContainer>
-							<Spacer flex={1} direction={"horizontal"} />
-							<MicrophoneIcon
-								width="24px"
-								height="24px"
-								color={
-									isListening
-										? theme.Colors.green600
-										: theme.Colors.neutral
-								}
-								onClick={handleMicrophoneClick}
-							/>
-							<SizedBox width={"12px"} />
-							<S.AnswerButton>답변하기</S.AnswerButton>
-						</S.ButtonContainer>
-					</>
-				)}
-			</S.Container>
-		</S.Overlay>
-	);
+					)}
+				</S.Container>
+			</S.Overlay>
+		);
+	}
 }
