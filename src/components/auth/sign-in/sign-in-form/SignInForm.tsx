@@ -42,8 +42,8 @@ export default function SingInForm(props: props) {
           },
         });
 
-        if (response.status === 200) {
-          navigate("/");
+        if (response.status === 201) {
+          navigate("/home");
         }
       } catch (error) {
         console.error(error);
