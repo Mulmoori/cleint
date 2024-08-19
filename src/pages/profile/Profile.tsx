@@ -1,6 +1,7 @@
 import React from "react";
 import * as S from "./style";
 import ProfileNumberBox from "@components/profile/profileNumberBox"; // 경로는 실제 위치에 맞게 조정해주세요
+import CustomButton from "@components/profile/logoutButton"; // 경로는 실제 위치에 맞게 조정해주세요
 
 export default function Profile(): JSX.Element {
 	return (
@@ -21,6 +22,9 @@ export default function Profile(): JSX.Element {
 						/>
 					</S.StyledProfileNumberBox>
 				</S.StatsContainer>
+				<S.ButtonContainer>
+					<CustomButton>로그아웃</CustomButton>
+				</S.ButtonContainer>
 			</S.ContentWrapper>
 		</S.PageWrapper>
 	);

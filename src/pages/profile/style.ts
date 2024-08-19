@@ -56,3 +56,10 @@ export const StyledProfileNumberBox = styled.div`
 		max-width: 100%;
 	}
 `;
+
+export const ButtonContainer = styled.div`
+	display: flex;
+	justify-content: flex-end;
+	width: 100%;
+	margin-top: 32px;
+`;
