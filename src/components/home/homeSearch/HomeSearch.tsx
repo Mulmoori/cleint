@@ -3,6 +3,10 @@ import * as S from "./style";
 import CustomModal from "@components/common/modal/Modal";
 import ModalInput from "@components/common/modal/ModalInput";
 import CustomAlert from "@components/common/alert/Alert";
+import instance from "../../../api/axios.ts";
+import {useRecoilState} from "recoil";
+import {narooteoBriefState, narooteoState} from "../../../context/narooteoState.ts";
+import {useNavigate} from "react-router-dom";
 
 interface JoinState {
     joinCode: string;
@@ -22,6 +26,10 @@ export default function HomeSearch(): JSX.Element {
         name: "",
     });
 
+    const [narooteoBrief, setNarooteoBrief] = useRecoilState(narooteoBriefState);
+    const [narooteoId, setNarooteoId] = useRecoilState(narooteoState);
+    const navigate = useNavigate();
+
     const alertOpen = (message: string) => {
         setAlertMessage(message);
         setIsAlertOpen(true);
@@ -32,10 +40,19 @@ export default function HomeSearch(): JSX.Element {
         setAlertMessage("");
     };
 
-    const openModal = (type: "create" | "join") => {
-        if (type === "join" && search === "") {
-            alertOpen("참여 코드를 입력해주세요");
-            return; // 모달이 뜨지 않도록 return
+    const openModal = async (type: "create" | "join") => {
+        try {
+            const response = await instance.get(`/api/v1/narooteos/briefs?participationCode=${search}`);
+
+            if (response.status===200) {
+                setNarooteoBrief({
+                    id: response.data.data.id,
+                    title: response.data.data.title,
+                    hostNickname: response.data.data.host_nickname
+                });
+            }
+        } catch (error) {
+            console.error(error);
         }
 
         if (type === "create") {
@@ -57,26 +74,45 @@ export default function HomeSearch(): JSX.Element {
         });
     };
 
-    const handleCreateRoom = () => {
+    const handleCreateRoom = async () => {
         if (roomName === "") {
             alertOpen("나루터 이름을 입력해주세요");
             return;
         }
-        console.log("나루터 이름 :" + roomName);
-        // Todo :  방 개설 API 호출
+
+        try {
+            const response = await instance.post("/api/v1/narooteos", {
+                title: roomName,
+            });
+
+            if (response.status === 201) {
+                alertOpen("나루터가 개설되었습니다.");
+                setNarooteoId(response.data.data.id);
+                navigate("/naruteo");
+            }
+        } catch (error) {
+            console.error(error);
+        }
 
         closeModal();
     };
 
-    const handleJoinRoom = () => {
-        if (joinState.name === "" || joinState.joinCode === "") {
-            alertOpen("참여 코드와 이름을 입력해주세요");
-            return;
+    const handleJoinRoom = async () => {
+
+        try {
+            const response = await instance.post('/api/v1/users/narooteos', {
+                narooteo_id: narooteoBrief.id,
+                participation_code: search,
+            })
+
+            if (response.status === 201) {
+                alertOpen("나루터에 참여되었습니다.");
+                setNarooteoId(narooteoBrief.id);
+                navigate("/naruteo");
+            }
+        } catch (error) {
+            console.error(error);
         }
-        console.log("참여코드 :" + search);
-        console.log("이름 :" + joinState.name);
-        console.log("개설자 :" + joinState.joinCode);
-        // Todo :  참여 코드 검색 후 참여 API 호출
 
         closeModal();
     };
@@ -97,25 +133,11 @@ export default function HomeSearch(): JSX.Element {
                 <>
                     <ModalInput
                         title="이름"
-                        placeholder="이름을 입력해주세요"
-                        value={joinState.name}
-                        onChange={(e) =>
-                            setJoinState({
-                                ...joinState,
-                                name: e.target.value,
-                            })
-                        }
+                        text={narooteoBrief.title}
                     />
                     <ModalInput
                         title="개설자"
-                        placeholder="개설자 이름을 입력해주세요"
-                        value={joinState.joinCode}
-                        onChange={(e) =>
-                            setJoinState({
-                                ...joinState,
-                                joinCode: e.target.value,
-                            })
-                        }
+                       text={narooteoBrief.hostNickname}
                     />
                 </>
             );

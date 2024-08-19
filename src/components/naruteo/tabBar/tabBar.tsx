@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import * as S from "./style";
 import QuestionBoxList from "../questionBoxList/questionBoxList";
+import instance from "../../../api/axios.ts";
+import {useRecoilState} from "recoil";
+import {narooteoState} from "../../../context/narooteoState.ts";
 
 const generateDummyQuestions = (count: number) => {
 	return Array(count)
@@ -21,10 +24,44 @@ const TabBar: React.FC = () => {
 		"전체질문방"
 	);
 
+	const narooteoId = useRecoilState(narooteoState);
+
 	const questions =
 		activeTab === "전체질문방"
 			? generateDummyQuestions(6)
 			: generateDummyQuestions(4);
+
+	const fetchTotalQuestions = async () => {
+		try {
+			const response = await instance.get(`/api/v1/narooteos/${narooteoId}/dialogues`);
+
+			if (response.status === 200) {
+				console.log(response.data.data);
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
+	const fetchMyQuestions = async () => {
+		try {
+			const response = await instance.get(`/api/v1/narooteos/${narooteoId}/users/dialogues`);
+
+			if (response.status === 200) {
+				console.log(response.data.data);
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
+	useEffect(() => {
+		if (activeTab === "전체질문방") {
+			fetchTotalQuestions().then(r => r);
+		} else {
+			fetchMyQuestions().then(r => r);
+		}
+	}, [activeTab]);
 
 	return (
 		<>

@@ -1,10 +1,9 @@
 import axios from "axios";
-import Cookie from "js-cookie";
 import Cookies from "js-cookie";
 
 const { VITE_APP_SERVER_PORT } = import.meta.env;
 
-const accessToken = Cookies.get('access_token');
+const accessToken = "eyJKV1QiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJhaWQiOiJlM2Q1NmEyNS04ZWI5LTQ5NjktOTMyNi0wNmQ1MDMyOGJjNmUiLCJyb2wiOiJVU0VSIiwiaWF0IjoxNzI0MDkxODk4LCJleHAiOjE3MjUzMDE0OTh9.5xXb3jl0_mSk3Yi23mQEXSGZlDMWV5GemXXvIw-8yP1j65vMsoTbJjKfn3Oovmgx73nkG3OIpipTeqjvaYe-dQ";
 
 
 const instance = axios.create({
