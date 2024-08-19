@@ -30,7 +30,7 @@ interface ResponseWrapper {
 	is_answered_by_llm?: string;
 }
 
-export default function DialogueDetailModal(props: props): any {
+export default function DialogueDetailModal(props: props):any {
 	const { transcript, listening, toggleListening } = useSpeechToText();
 
 	const [questionDetail, setQuestionDetail] = useState<ResponseWrapper>();

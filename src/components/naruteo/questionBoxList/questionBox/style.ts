@@ -14,6 +14,8 @@ export const BoxContainer = styled.div`
 	border: 1px solid var(--neutral-300, #d4d4e3);
 	background: #fff;
 	box-shadow: 2px 2px 12px 0px rgba(0, 0, 0, 0.1);
+    
+    cursor: pointer;
 `;
 
 export const TitleContainer = styled.div`

@@ -7,7 +7,7 @@ export const Overlay = styled.div`
 	left: 0;
 	width: 100%;
 	height: 100%;
-	z-index: 90;
+	z-index: 9990;
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
